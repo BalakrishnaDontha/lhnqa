@@ -1,0 +1,25 @@
+
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+
+
+# Eclipse
+.settings/
+.classpath
+.project
+.gradle/
+
+# Gradle
+build/
+
+
+# TestNG folder
+test-output/

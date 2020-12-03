@@ -1,0 +1,103 @@
+	<rule id="rule9" displayName="BatchChange">
+		<query>
+			<query id="Disjunction-0" creationDate="1385123974970">
+				<searchField name="rm_main" expExactMatch="false" fuzzy="false"
+					exactMatch="false">
+					<value>*</value>
+				</searchField>
+			</query>
+		</query>
+		<meta>			
+			<trigger>
+				<triggerWhen>added</triggerWhen>
+				<triggerWhen>manual</triggerWhen>
+				<triggerWhen>automatic</triggerWhen>
+				<taxonomyID>ax_batch</taxonomyID>				
+			</trigger>
+			<action>
+				<actionFlag type="match">true</actionFlag>
+				<actionFlag type="drop">false</actionFlag>
+				<actionFlag type="publish">false</actionFlag>				
+				<callBack
+					name="com.recommind.publishing.RuleBasedConfigurablePublishingCallback">
+					<actionParam name="publisherClassName">com.recommind.publishing.FincaExportPublisher</actionParam>
+					<actionParam name="exportType">CSV</actionParam>					
+					<actionParam name="export_notify_external_connectors">true</actionParam>
+					<actionParam name="ignoreConfiguredExportFields">true</actionParam>
+					<actionParam name="additionalExportField">rm_loadbatch,metadata_text_one_row_039,agreement_id,ax_review_state,ax_batch_exceptions,ax_batch,ax_reviewed,ax_reviewed_by,ax_message,exceptions</actionParam>
+					<actionParam name="additionalExportFieldDisplayName">Load Batch Name,Review Request ID,Agreement ID,Review State,Review Batch Exception,Review Batch,Reviewed,Reviewed By,Review Comment,Exceptions</actionParam>
+<!-- use the below parameter to explicitly set a base directory different from the one defined in the admin tool -->
+ 					<!-- <actionParam name="exportBaseDirectory">../exportcsv</actionParam>  -->			
+ 			</callBack>
+			</action>
+			<properties id="rule9" creationDate="1385109270759"
+				creator="admin" editor="admin" displayName="BatchChange" editDate="1385124030784">
+				<description>Export when review batch changes</description>
+			</properties>
+		</meta>
+	</rule>
+	<!--  ++++++++++++++++++++++ --> 
+	<rule id="rule10" displayName="MetadataChangeComplete">
+		<query>
+			<query id="Disjunction-0" creationDate="1505745887120">
+				<searchField name="rm_taxonomy_metadata_text_one_row_040">
+					<value>ignore</value>
+				</searchField>
+			</query>
+		</query>
+		<meta>
+			<status>DEFAULT_STATUS</status>
+			<trigger>
+				<triggerWhen>added</triggerWhen>
+				<triggerWhen>manual</triggerWhen>
+				<triggerWhen>automatic</triggerWhen>
+				<taxonomyID>metadata_text_one_row_040</taxonomyID>
+			</trigger>
+			<action>
+				<actionFlag type="match">false</actionFlag>
+				<actionFlag type="drop">false</actionFlag>
+				<actionFlag type="publish">false</actionFlag>
+                <callBack name="com.recommind.publishing.RuleBasedConfigurablePublishingCallback">
+                    <actionParam name="export_notify_external_connectors">true</actionParam>
+                    <actionParam name="publisherClassName">com.recommind.publishing.FincaExportPublisher</actionParam>
+                    <actionParam name="exportType">Perceptiv plain XML</actionParam>
+                </callBack>
+            </action>
+            <properties id="rule10" creationDate="1385109270760" creator="admin" editor="admin" displayName="MetadataChangeComplete" editDate="1385124030785">
+                <description>Export XMLs after Metadata Changes</description>
+            </properties>
+        </meta>
+    </rule>
+	<!--  ++++++++++++++++++++++ --> 
+    <rule id="rule11" displayName="MetadataChangeCompleteQlik">
+		<query>
+			<query id="Disjunction-0" creationDate="1505745887120">
+				<searchField name="rm_taxonomy_metadata_text_one_row_040">
+					<value>ignore</value>
+				</searchField>
+			</query>
+		</query>
+		<meta>
+			<status>DEFAULT_STATUS</status>
+			<trigger>
+				<triggerWhen>added</triggerWhen>
+				<triggerWhen>manual</triggerWhen>
+				<triggerWhen>automatic</triggerWhen>
+				<taxonomyID>metadata_text_one_row_040</taxonomyID>
+			</trigger>
+			<action>
+				<actionFlag type="match">false</actionFlag>
+				<actionFlag type="drop">false</actionFlag>
+				<actionFlag type="publish">false</actionFlag>
+                <callBack name="com.recommind.publishing.RuleBasedConfigurablePublishingCallback">
+                    <actionParam name="export_notify_external_connectors">false</actionParam>
+                    <actionParam name="publisherClassName">com.recommind.publishing.FincaExportPublisher</actionParam>
+                    <actionParam name="exportType">Perceptiv plain XML</actionParam>
+                    <actionParam name="exportBaseDirectory">C:/Temp/Hexagon/onload-xml-export</actionParam>			
+                </callBack>
+            </action>
+            <properties id="rule11" creationDate="1385109270762" creator="admin" editor="admin" displayName="MetadataChangeCompleteQlik" editDate="1385124030786">
+                <description>Export XMLs after Metadata Changes to onload folder for Qlik reports</description>
+            </properties>
+        </meta>
+    </rule>

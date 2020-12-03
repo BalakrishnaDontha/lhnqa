@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="LegalHoldNotices" verbose="1" parallel="none" preserve-order="true">
+	<parameter name="test_data_api_file" value="testdata_api.yaml" />
+	<parameter name="lhn_username" value="recomminder" />
+	<parameter name="lhn_password" value="recommender" />
+	<parameter name="lhn_token" value="Bds8U2z52N1aPD-tSNE8"/>
+	<parameter name="requestProcessWaitTime" value="15" /> <!-- Mins -->
+	<parameter name="lhn_base_end_point" value="http://10.194.128.102:3000" />
+	<test name="lhn_rest_api" preserve-order="true">
+		<groups>
+			<run>
+				<include name="Regression"></include>
+				<include name="Smoke"></include>
+			</run>
+		</groups>
+		<classes>
+			<class name="com.opentext.lhnqa.api.testcases.custodians.ListCustodians"/>
+		</classes>
+	</test>
+</suite>
