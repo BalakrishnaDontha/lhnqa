@@ -20,13 +20,13 @@ import com.opentext.lhnqa.lib.utils.ExtLogger;
 import com.opentext.lhnqa.lib.utils.TestDataAPIYamlRepo;
 
 public class ApiTestcaseBase implements ReferenceData {
-	public ExtLogger logger = new ExtLogger(ApiTestcaseBase.class.toString());
-	public RestHandler restUtil;
+	static final ExtLogger LOGGER = new ExtLogger(ApiTestcaseBase.class.toString());
+	public static RestHandler restUtil;
 	public Random rand;
 
 	public String nativesPath;
 	public ApiUtils apiUtil;
-	public ObjectMapper mapper = new ObjectMapper();
+	public static final ObjectMapper MAPPER = new ObjectMapper();
 
 	@BeforeClass(alwaysRun = true)
 	public void intializeSetup(XmlTest config) throws JsonParseException, JsonMappingException, IOException {
@@ -34,7 +34,7 @@ public class ApiTestcaseBase implements ReferenceData {
 		// Getting native files path based on TestNG file. Hence maintain same folder
 		// structure
 		File testNGFile = new File(config.getSuite().getFileName());
-		nativesPath = testNGFile.getParent() + File.separator + nativesFolder + File.separator;
+		nativesPath = testNGFile.getParent() + File.separator + NATIVESFOLDER + File.separator;
 
 		restUtil = new RestHandler(config);
 		apiUtil = new ApiUtils(restUtil, nativesPath);
@@ -43,12 +43,16 @@ public class ApiTestcaseBase implements ReferenceData {
 
 	@AfterClass(alwaysRun = true)
 	public void cleanUpMethod() {
-		logger.testLog(Level.INFO, "Initiating the flush");
+		LOGGER.testLog(Level.INFO, "Initiating the flush");
 		// TODO For data cleanup
 	}
 
 	@DataProvider(name = "ApiDataFromYml")
 	public Object[][] testCaseDataProviderYml(ITestContext context, Method m) {
 		return TestDataAPIYamlRepo.getDataRepo(context).getData(m.getName());
+	}
+
+	public String getNativesPath() {
+		return nativesPath;
 	}
 }

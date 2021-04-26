@@ -1,5 +1,274 @@
-getValidCustodians:
+createCustodian:
                               Data1:
-                                     custodianId:   "157"
-
-                                                                                                                                                   
+                                     tenantId:   "cristnolan"                
+createCustodianVariousNames:
+                              Data1:
+                                     custodianFirstName:   "QAAutoBalakrishna"
+                                     custodianLastName: "Dontha"
+                                     tenantId:   "cristnolan"
+                              Data2:
+                                     custodianFirstName:   "QAAuto Konika"
+                                     custodianLastName: "Punjab"
+                                     tenantId:   "cristnolan"
+                              Data3:
+                                     custodianFirstName:   "QAAutoInzi-m@m_UL!ha'q"
+                                     custodianLastName: "pak!@#$%^&*()_+=-is;:\\|}{[]<>,. than"
+                                     tenantId:   "cristnolan" 
+createCustodianNoSupervisor:  
+                              Data1:
+                                     tenantId:   "cristnolan" 
+                              Data2:
+                                     tenantId:   "cristnolan"
+                                     supervisorName: "Ketan Deshpande"
+                              Data3:
+                                     tenantId:   "cristnolan"
+                                     supervisorEmail: "KetanD123@otxx.com"                                                                          
+createCustodianNoDelegator:  
+                              Data1:
+                                     tenantId:   "cristnolan"
+                              Data2:
+                                     tenantId:   "cristnolan"
+                                     delegatorName: "Ketan Deshpande"
+                              Data3:
+                                     tenantId:   "cristnolan"
+                                     delegatorEmail: "KetanD123@otxx.com"                                     
+createCustodianNoSupervisorAndDelegator:  
+                                          Data1:
+                                                 tenantId:   "cristnolan" 
+createCustodianWithoutMandatoryAtrributes:  
+                                 Data1:
+                                        tenantId:   "cristnolan" 
+                                        custodianLastName: "smith"
+                                        custodianEmail: "lhnqa@otx.com"
+                                        errorMessage: "First name can't be blank"
+                                 Data2:
+                                        tenantId:   "cristnolan" 
+                                        custodianFirstName: "smith"
+                                        custodianEmail: "lhnqaa@otmm.com"
+                                        errorMessage: "Last name can't be blank"
+                                 Data3:
+                                        tenantId:   "cristnolan" 
+                                        custodianFirstName: "Will"
+                                        custodianLastName: "Smith"  
+                                        errorMessage: "Email can't be blank" 
+                                 Data4:
+                                        tenantId:   "cristnolan" 
+                                        custodianFirstName: "Will"
+                                        errorMessage: "Last name can't be blank,Email can't be blank"
+                                 Data5:
+                                        tenantId:   "cristnolan" 
+                                        custodianEmail: "lhnqa@otx.com"
+                                        errorMessage: "First name can't be blank,Last name can't be blank"
+                                 Data6:
+                                        tenantId:   "cristnolan" 
+                                        custodianLastName: "Smith" 
+                                        errorMessage: "First name can't be blank,Email can't be blank"                                                                                                                        
+                                 Data7:
+                                        tenantId:   "cristnolan" 
+                                        errorMessage: "First name can't be blank,Last name can't be blank,Email can't be blank"                                                                                                                       
+verfiyCustodiansValidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan"     
+verfiySupervisorValidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan"  
+verfiyDelegatorValidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan"                                                                            
+verfiyCustodiansInvalidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan"
+                                     errorMessage: "Email is invalid"
+verfiySupervisorInvalidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan" 
+                                     errorMessage: "Supervisor email is invalid"
+verfiyDelegatorInvalidEmail:  
+                              Data1:
+                                     tenantId:   "cristnolan"  
+                                     errorMessage: "Delegate email is invalid"                                                                                                                                                                                                                                                                                                                                                    
+getInvalidCustodian:
+                              Data1:
+                                     custodianId:   "00"
+                                     tenantId:   "cristnolan" 
+                              Data2:
+                                     custodianId:   "-23"
+                                     tenantId:   "cristnolan"  
+                              Data3:
+                                     custodianId:   "James"
+                                     tenantId:   "cristnolan"
+                              Data4:
+                                     custodianId:   "Peter@eng!#a$%n^d&23tg*ud"
+                                     tenantId:   "cristnolan" 
+getLegalHold:
+                              Data1:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     legalholdId:   "1682"
+draftLegalHold:      
+                              Data1:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "12.pdf"
+                                     docMimeType: "application/pdf"
+                              Data2:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "12.pdf,SampleText.txt"
+                                     docMimeType: "application/pdf,text/plain"                                                                           
+verifyLHInvalidFile:      
+                              Data1:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt"
+                                     docMimeType: "text/plain"
+                                     lhDocControlName: "hold_notice_attachments[]"
+                                     errorMessage: "Hold notice attachments file size must be greater than 0 Bytes"
+                                     responseCode: "422"
+                              Data2:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt"
+                                     docMimeType: "text/plain"
+                                     lhDocControlName: "acknowledgement_reminder_notice_attachments[]"   
+                                     errorMessage: "Acknowledgement reminder notice attachments file size must be greater than 0 Bytes"
+                                     responseCode: "422"                               
+                              Data3:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt"
+                                     docMimeType: "text/plain"
+                                     lhDocControlName: "hold_reminder_notice_attachments[]"
+                                     errorMessage: "Hold reminder notice attachments file size must be greater than 0 Bytes"
+                                     responseCode: "422"                                     
+                              Data4:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt"
+                                     docMimeType: "text/plain"
+                                     lhDocControlName: "release_notice_attachments[]"
+                                     errorMessage: "Release notice attachments file size must be greater than 0 Bytes"
+                                     responseCode: "422"                                     
+                              Data5:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt"
+                                     docMimeType: "text/plain"
+                                     lhDocControlName: "escalation_notice_attachments[]"
+                                     errorMessage: "Escalation notice attachments file size must be greater than 0 Bytes"
+                                     responseCode: "422"
+                              Data6:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "BigFile.pdf"
+                                     docMimeType: "application/pdf"
+                                     lhDocControlName: "hold_notice_attachments[]"
+                                     errorMessage: "Hold notice attachments file size must be less than or equal to 5 MB"
+                                     responseCode: "422"
+                              Data7:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "BigFile.pdf"
+                                     docMimeType: "application/pdf"
+                                     lhDocControlName: "acknowledgement_reminder_notice_attachments[]"   
+                                     errorMessage: "Acknowledgement reminder notice attachments file size must be less than or equal to 5 MB"
+                                     responseCode: "422"                               
+                              Data8:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "BigFile.pdf"
+                                     docMimeType: "application/pdf"
+                                     lhDocControlName: "hold_reminder_notice_attachments[]"
+                                     errorMessage: "Hold reminder notice attachments file size must be less than or equal to 5 MB"
+                                     responseCode: "422"                                     
+                              Data9:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "BigFile.pdf"
+                                     docMimeType: "application/pdf"
+                                     lhDocControlName: "release_notice_attachments[]"
+                                     errorMessage: "Release notice attachments file size must be less than or equal to 5 MB"
+                                     responseCode: "422"                                     
+                              Data10:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "BigFile.pdf"
+                                     docMimeType: "application/pdf"
+                                     lhDocControlName: "escalation_notice_attachments[]"
+                                     errorMessage: "Escalation notice attachments file size must be less than or equal to 5 MB"
+                                     responseCode: "422"
+                              Data11:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "dbBackup.backup"
+                                     docMimeType: "application/octet-stream"
+                                     lhDocControlName: "hold_notice_attachments[]"
+                                     errorMessage: "Hold notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422"                                                                                                              
+                              Data12:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "dbBackup.backup"
+                                     docMimeType: "application/octet-stream"
+                                     lhDocControlName: "acknowledgement_reminder_notice_attachments[]"
+                                     errorMessage: "Acknowledgement reminder notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422" 
+                              Data13:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "dbBackup.backup"
+                                     docMimeType: "application/octet-stream"
+                                     lhDocControlName: "hold_reminder_notice_attachments[]"
+                                     errorMessage: "Hold reminder notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422" 
+                              Data14:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "dbBackup.backup"
+                                     docMimeType: "application/octet-stream"
+                                     lhDocControlName: "release_notice_attachments[]"
+                                     errorMessage: "Release notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422" 
+                              Data15:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "dbBackup.backup"
+                                     docMimeType: "application/octet-stream"
+                                     lhDocControlName: "escalation_notice_attachments[]"
+                                     errorMessage: "Escalation notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422"
+                              Data16:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"  
+                                     docName: "EmptyFile.txt,BigFile.pdf,dbBackup.backup"
+                                     docMimeType: "text/plain,application/pdf,application/octet-stream"
+                                     lhDocControlName: "hold_notice_attachments[]"
+                                     errorMessage: "Hold notice attachments file size must be greater than 0 Bytes&Hold notice attachments file size must be less than or equal to 5 MB&Hold notice attachments file is not allowed, as it is potentially unsafe"
+                                     responseCode: "422" 
+sendLegalHoldWithNoCustodians:      
+                              Data1:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"
+                                     errorMessage: "Custodians must be selected"
+                                     responseCode: "422"
+                                     custodianId: ""                                   
+legalHoldWithInvalidCustodians:
+                              Data1:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"
+                                     errorMessage: "Custodians are not valid"
+                                     responseCode: "422"
+                                     custodianId: ""       
+                              Data2:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"
+                                     errorMessage: "Custodians are not valid"
+                                     responseCode: "422"
+                                     custodianId: "0,-36"
+                              Data3:
+                                     tenantId:   "cristnolan"    
+                                     matterId:   "5"
+                                     errorMessage: "Custodians are not valid"
+                                     responseCode: "422"
+                                     custodianId: "0"  
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

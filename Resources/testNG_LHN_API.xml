@@ -5,7 +5,7 @@
 	<parameter name="lhn_password" value="recommender" />
 	<parameter name="lhn_token" value="Bds8U2z52N1aPD-tSNE8"/>
 	<parameter name="requestProcessWaitTime" value="15" /> <!-- Mins -->
-	<parameter name="lhn_base_end_point" value="http://10.194.128.102:3000" />
+	<parameter name="lhn_base_end_point" value="http://10.194.128.102:3004" />
 	<test name="lhn_rest_api" preserve-order="true">
 		<groups>
 			<run>
@@ -14,7 +14,11 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="com.opentext.lhnqa.api.testcases.custodians.ListCustodians"/>
+			<class name="com.opentext.lhnqa.api.testcases.legalhold.CreateLegalHold">
+			<methods>
+			<include name="draftLegalHold"/>
+			</methods>
+			</class>
 		</classes>
 	</test>
 </suite>
