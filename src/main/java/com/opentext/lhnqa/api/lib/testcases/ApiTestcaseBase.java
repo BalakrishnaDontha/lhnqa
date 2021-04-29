@@ -52,6 +52,16 @@ public class ApiTestcaseBase implements ReferenceData {
 		return TestDataAPIYamlRepo.getDataRepo(context).getData(m.getName());
 	}
 
+	@DataProvider(name = "ValidEmailId")
+	public Object[][] dataProviderValidEmailId(ITestContext context) {
+		return TestDataAPIYamlRepo.getDataRepo(context).getData("validEmailId");
+	}
+
+	@DataProvider(name = "InvalidEmailId")
+	public Object[][] dataProviderInvalidEmailId(ITestContext context) {
+		return TestDataAPIYamlRepo.getDataRepo(context).getData("invalidEmailId");
+	}
+
 	public String getNativesPath() {
 		return nativesPath;
 	}

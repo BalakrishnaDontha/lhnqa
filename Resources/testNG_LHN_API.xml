@@ -14,9 +14,9 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="com.opentext.lhnqa.api.testcases.legalhold.CreateLegalHold">
+			<class name="com.opentext.lhnqa.api.testcases.custodians.CreateCustodians">
 			<methods>
-			<include name="draftLegalHold"/>
+			<include name="verfiyDelegatorInvalidEmail"/>
 			</methods>
 			</class>
 		</classes>

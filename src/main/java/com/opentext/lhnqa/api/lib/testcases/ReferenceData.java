@@ -27,6 +27,7 @@ public interface ReferenceData {
 	String DATA_CUSTODIAN_FNAME = "custodianFirstName";
 	String DATA_CUSTODIAN_LNAME = "custodianLastName";
 	String DATA_CUSTODIAN_EMAIL = "custodianEmail";
+	String DATA_EMAIL_ID = "emailId";
 
 	// Test case Groups
 	String REGRESSION_GROUP = "Regression";
@@ -63,6 +64,9 @@ public interface ReferenceData {
 
 	//error messages
 	String ERROR_HOLDNOTICE_EMPTYFILE = " notice attachments file size must be greater than 0 Bytes";
+	String ERROR_EMAIL_CUSTODIAN = "Email is invalid";
+	String ERROR_EMAIL_SUPERVISOR = "Supervisor email is invalid";
+	String ERROR_EMAIL_DELEGATOR = "Delegate email is invalid";
 
 	//Email
 	String[]  VALID_EMAIL_ADDRESS = {"simple@example.com","very.common@example.com","disposable.style.email.with+symbol@example.com","other.email-with-hyphen@example.com",

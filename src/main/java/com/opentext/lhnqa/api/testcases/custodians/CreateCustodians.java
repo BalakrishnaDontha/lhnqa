@@ -1,7 +1,6 @@
 package com.opentext.lhnqa.api.testcases.custodians;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -224,233 +223,166 @@ public class CreateCustodians extends ApiTestcaseBase {
 				Arrays.asList(testdata.get(DATA_ERROR_MESSAGE).split(",")), "Error message does not match");
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiyCustodiansValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiyCustodiansValidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < VALID_EMAIL_ADDRESS.length; count++) {
-			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setEmail(VALID_EMAIL_ADDRESS[count]);
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+		custodianRequest.setEmail(testdata.get(DATA_EMAIL_ID));
 
-			LOGGER.stepLog("Posting the Custodian create request");
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		LOGGER.stepLog("Posting the Custodian create request");
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+				" Error in creating custodian with email id " + testdata.get(DATA_EMAIL_ID) + " And error is : " + response.asString());
 
-			if (response.statusCode() == HttpStatus.SC_OK) {
-				LOGGER.stepLog("Reading the POST Custodian response");
-				CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(),
-						CustodianResponsePojo.class);
-				long custodianId = requestResponse.getId();
+		LOGGER.stepLog("Reading the POST Custodian response");
+		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
+		long custodianId = requestResponse.getId();
 
-				Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-				Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-				Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK,
-						" Error in listing custodians response code ");
+		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
+		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
+		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 
-				LOGGER.stepLog("Reading the GET custodian response");
-				CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(),
-						CustodianResponsePojo.class);
+		LOGGER.stepLog("Reading the GET custodian response");
+		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
 
-				LOGGER.stepLog("Validate the custodian response");
-				Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-						+ response.asString() + " And Get Custodian " + getCustodian.asString());
-			} else {
-				invalidResponse++;
-				emailNotAccepted.add(VALID_EMAIL_ADDRESS[count]);
-			}
-		}
+		LOGGER.stepLog("Validate the custodian response");
+		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
+				+ response.asString() + " And Get Custodian " + getCustodian.asString());
 
-		Assert.assertEquals(invalidResponse, 0, " Error in creating custodian with email id(s) " + emailNotAccepted);
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiySupervisorValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiySupervisorValidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < VALID_EMAIL_ADDRESS.length; count++) {
-			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setSupervisor_email((VALID_EMAIL_ADDRESS[count]));
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+		custodianRequest.setSupervisor_email(testdata.get(DATA_EMAIL_ID));
 
-			LOGGER.stepLog("Posting the Custodian create request");
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		LOGGER.stepLog("Posting the Custodian create request");
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK, " Error in creating custodian with Supervisor email id "
+				+ testdata.get(DATA_EMAIL_ID) + " And error is : " + response.asString());
 
-			if (response.statusCode() == HttpStatus.SC_OK) {
-				LOGGER.stepLog("Reading the POST Custodian response");
-				CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(),
-						CustodianResponsePojo.class);
-				long custodianId = requestResponse.getId();
+		LOGGER.stepLog("Reading the POST Custodian response");
+		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
+		long custodianId = requestResponse.getId();
 
-				Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-				Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-				Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK,
-						" Error in listing custodians response code ");
+		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
+		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
+		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 
-				LOGGER.stepLog("Reading the GET custodian response");
-				CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(),
-						CustodianResponsePojo.class);
+		LOGGER.stepLog("Reading the GET custodian response");
+		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
 
-				LOGGER.stepLog("Validate the custodian response");
-				Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-						+ response.asString() + " And Get Custodian " + getCustodian.asString());
-			} else {
-				invalidResponse++;
-				emailNotAccepted.add(VALID_EMAIL_ADDRESS[count]);
-			}
-		}
+		LOGGER.stepLog("Validate the custodian response");
+		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
+				+ response.asString() + " And Get Custodian " + getCustodian.asString());
 
-		Assert.assertEquals(invalidResponse, 0,
-				" Error in creating custodian with supervisor email id(s) " + emailNotAccepted);
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiyDelegatorValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiyDelegatorValidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < VALID_EMAIL_ADDRESS.length; count++) {
-			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setDelegate_email((VALID_EMAIL_ADDRESS[count]));
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+		custodianRequest.setDelegate_email(testdata.get(DATA_EMAIL_ID));
 
-			LOGGER.stepLog("Posting the Custodian create request");
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		LOGGER.stepLog("Posting the Custodian create request");
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK, " Error in creating custodian with Delegator email id "
+				+ testdata.get(DATA_EMAIL_ID) + " And error is : " + response.asString());
 
-			if (response.statusCode() == HttpStatus.SC_OK) {
-				LOGGER.stepLog("Reading the POST Custodian response");
-				CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(),
-						CustodianResponsePojo.class);
-				long custodianId = requestResponse.getId();
+		LOGGER.stepLog("Reading the POST Custodian response");
+		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
+		long custodianId = requestResponse.getId();
 
-				Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-				Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-				Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK,
-						" Error in listing custodians response code ");
+		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
+		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
+		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 
-				LOGGER.stepLog("Reading the GET custodian response");
-				CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(),
-						CustodianResponsePojo.class);
+		LOGGER.stepLog("Reading the GET custodian response");
+		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
 
-				LOGGER.stepLog("Validate the custodian response");
-				Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-						+ response.asString() + " And Get Custodian " + getCustodian.asString());
-			} else {
-				invalidResponse++;
-				emailNotAccepted.add(VALID_EMAIL_ADDRESS[count]);
-			}
-		}
-
-		Assert.assertEquals(invalidResponse, 0,
-				" Error in creating custodian with delegator email id(s) " + emailNotAccepted);
+		LOGGER.stepLog("Validate the custodian response");
+		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
+				+ response.asString() + " And Get Custodian " + getCustodian.asString());
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiyCustodiansInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiyCustodiansInvalidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < INVALID_EMAIL_ADDRESS.length; count++) {
-			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setEmail(INVALID_EMAIL_ADDRESS[count]);
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+		custodianRequest.setEmail(testdata.get(DATA_EMAIL_ID));
 
-			LOGGER.stepLog("Posting the Custodian create request");
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		LOGGER.stepLog("Posting the Custodian create request");
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_BAD_REQUEST,
+				" No Error in creating custodian for email id " + testdata.get(DATA_EMAIL_ID));
+		Assert.assertEquals(response.jsonPath().getList("errors").get(0), ERROR_EMAIL_CUSTODIAN,
+				"Error message does not match for " + testdata.get(DATA_EMAIL_ID));
 
-			if (response.statusCode() != HttpStatus.SC_BAD_REQUEST) {
-				invalidResponse++;
-				emailNotAccepted.add(INVALID_EMAIL_ADDRESS[count]);
-			} else {
-				Assert.assertEquals(response.jsonPath().getList("errors").get(0), testdata.get(DATA_ERROR_MESSAGE),
-						"Error message does not match for " + INVALID_EMAIL_ADDRESS[count]);
-			}
-		}
-
-		Assert.assertEquals(invalidResponse, 0, " No Error in creating custodian for email id(s) " + emailNotAccepted);
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiySupervisorInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiySupervisorInvalidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < INVALID_EMAIL_ADDRESS.length; count++) {
 			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setSupervisor_email(INVALID_EMAIL_ADDRESS[count]);
+			custodianRequest.setSupervisor_email(testdata.get(DATA_EMAIL_ID));
 
 			LOGGER.stepLog("Posting the Custodian create request");
 			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
 			Assert.assertNotNull(response, "Response of posting custodian is NULL");
-
-			if (response.statusCode() != HttpStatus.SC_BAD_REQUEST) {
-				invalidResponse++;
-				emailNotAccepted.add(INVALID_EMAIL_ADDRESS[count]);
-			} else {
-				Assert.assertEquals(response.jsonPath().getList("errors").get(0), testdata.get(DATA_ERROR_MESSAGE),
-						"Error message does not match for " + INVALID_EMAIL_ADDRESS[count]);
-			}
-		}
-
-		Assert.assertEquals(invalidResponse, 0,
-				" No Error in creating custodian with supervisor email id(s) " + emailNotAccepted);
+			Assert.assertEquals(response.statusCode(), HttpStatus.SC_BAD_REQUEST,
+					" No Error in creating custodian for supervisor email id " + testdata.get(DATA_EMAIL_ID));
+			Assert.assertEquals(response.jsonPath().getList("errors").get(0), ERROR_EMAIL_SUPERVISOR,
+					"Error message does not match for " + testdata.get(DATA_EMAIL_ID));
 	}
 
-	@Test(dataProvider = "ApiDataFromYml", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
+	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
 	public void verfiyDelegatorInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing verfiyDelegatorInvalidEmail ");
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
-		int invalidResponse = 0;
-		List<String> emailNotAccepted = new ArrayList<String>();
 
-		for (int count = 0; count < INVALID_EMAIL_ADDRESS.length; count++) {
-			CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-			custodianRequest.setDelegate_email(INVALID_EMAIL_ADDRESS[count]);
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+		custodianRequest.setDelegate_email(testdata.get(DATA_EMAIL_ID));
 
-			LOGGER.stepLog("Posting the Custodian create request");
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of posting custodian is NULL");
-
-			if (response.statusCode() != HttpStatus.SC_BAD_REQUEST) {
-				invalidResponse++;
-				emailNotAccepted.add(INVALID_EMAIL_ADDRESS[count]);
-			} else {
-				Assert.assertEquals(response.jsonPath().getList("errors").get(0), testdata.get(DATA_ERROR_MESSAGE),
-						"Error message does not match for " + INVALID_EMAIL_ADDRESS[count]);
-			}
-		}
-
-		Assert.assertEquals(invalidResponse, 0,
-				" No Error in creating custodian with delegator email id(s) " + emailNotAccepted);
+		LOGGER.stepLog("Posting the Custodian create request");
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of posting custodian is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_BAD_REQUEST,
+				" No Error in creating custodian for delegator email id " + testdata.get(DATA_EMAIL_ID));
+		Assert.assertEquals(response.jsonPath().getList("errors").get(0), ERROR_EMAIL_DELEGATOR,
+				"Error message does not match for " + testdata.get(DATA_EMAIL_ID));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "get custodians with invalid id", groups = { REGRESSION_GROUP,

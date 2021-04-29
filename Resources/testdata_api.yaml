@@ -65,28 +65,7 @@ createCustodianWithoutMandatoryAtrributes:
                                         errorMessage: "First name can't be blank,Email can't be blank"                                                                                                                        
                                  Data7:
                                         tenantId:   "cristnolan" 
-                                        errorMessage: "First name can't be blank,Last name can't be blank,Email can't be blank"                                                                                                                       
-verfiyCustodiansValidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan"     
-verfiySupervisorValidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan"  
-verfiyDelegatorValidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan"                                                                            
-verfiyCustodiansInvalidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan"
-                                     errorMessage: "Email is invalid"
-verfiySupervisorInvalidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan" 
-                                     errorMessage: "Supervisor email is invalid"
-verfiyDelegatorInvalidEmail:  
-                              Data1:
-                                     tenantId:   "cristnolan"  
-                                     errorMessage: "Delegate email is invalid"                                                                                                                                                                                                                                                                                                                                                    
+                                        errorMessage: "First name can't be blank,Last name can't be blank,Email can't be blank"                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 getInvalidCustodian:
                               Data1:
                                      custodianId:   "00"
@@ -100,6 +79,86 @@ getInvalidCustodian:
                               Data4:
                                      custodianId:   "Peter@eng!#a$%n^d&23tg*ud"
                                      tenantId:   "cristnolan" 
+validEmailId:
+                              Data1:
+                                     emailId:   "simple@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data2:
+                                     emailId:   "very.common@example.com"
+                                     tenantId:   "cristnolan"
+                              Data3:
+                                     emailId:   "disposable.style.email.with+symbol@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data4:
+                                     emailId:   "other.email-with-hyphen@example.com"
+                                     tenantId:   "cristnolan"
+                              Data5:
+                                     emailId:   "fully-qualified-domain@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data6:
+                                     emailId:   "user.name+tag+sorting@example.com"
+                                     tenantId:   "cristnolan"  
+                              Data7:
+                                     emailId:   "x@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data8:
+                                     emailId:   "example-indeed@strange-example.com"
+                                     tenantId:   "cristnolan"
+                              Data9:
+                                     emailId:   "admin@mailserver1"
+                                     tenantId:   "cristnolan" 
+                              Data10:
+                                     emailId:   "example@s.example"
+                                     tenantId:   "cristnolan"
+                              Data11:
+                                     emailId:   "example@example.com1"
+                                     tenantId:   "cristnolan" 
+                              Data12:
+                                     emailId:   "\" \"@example.org"
+                                     tenantId:   "cristnolan"  
+                              Data13:
+                                     emailId:   "\"john..doe\"@example.org"
+                                     tenantId:   "cristnolan"
+invalidEmailId:
+                              Data1:
+                                     emailId:   "Abc.example.com"
+                                     tenantId:   "cristnolan" 
+                              Data2:
+                                     emailId:   "A@b@c@example.com"
+                                     tenantId:   "cristnolan"
+                              Data3:
+                                     emailId:   "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data4:
+                                     emailId:   "just\"not\"right@example.com"
+                                     tenantId:   "cristnolan"
+                              Data5:
+                                     emailId:   "this is\"not\\allowed@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data6:
+                                     emailId:   "this\\ still\\\"not\nallowed@example.com"
+                                     tenantId:   "cristnolan"  
+                              Data7:
+                                     emailId:   "1234567890123456789012345678901234567890123456789012345678901234+x@example.com"
+                                     tenantId:   "cristnolan" 
+                              Data8:
+                                     emailId:   "john..doe@example.com"
+                                     tenantId:   "cristnolan"
+                              Data9:
+                                     emailId:   "john.doe@example..com"
+                                     tenantId:   "cristnolan" 
+                              Data10:
+                                     emailId:   "example@example.3com"
+                                     tenantId:   "cristnolan"
+                              Data11:
+                                     emailId:   "example@example.42"
+                                     tenantId:   "cristnolan" 
+                              Data12:
+                                     emailId:   "example@example.a"
+                                     tenantId:   "cristnolan"  
+                              Data13:
+                                     emailId:   " example@example.com "
+                                     tenantId:   "cristnolan"                                                                                                                                                                                                                             
 getLegalHold:
                               Data1:
                                      tenantId:   "cristnolan"    
