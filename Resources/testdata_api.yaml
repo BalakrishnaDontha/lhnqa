@@ -1,4 +1,4 @@
-createCustodian:
+createValidCustodians:
                               Data1:
                                      tenantId:   "cristnolan"                
 createCustodianVariousNames:
@@ -175,14 +175,14 @@ draftLegalHold:
                                      matterId:   "5"  
                                      docName: "12.pdf,SampleText.txt"
                                      docMimeType: "application/pdf,text/plain"                                                                           
-verifyLHInvalidFile:      
+verifyLHInvalidFile:   
                               Data1:
                                      tenantId:   "cristnolan"    
                                      matterId:   "5"  
                                      docName: "EmptyFile.txt"
                                      docMimeType: "text/plain"
                                      lhDocControlName: "hold_notice_attachments[]"
-                                     errorMessage: "Hold notice attachments file size must be greater than 0 Bytes"
+                                     errorMessage: "Hold notice attachments file :Uploaded file cannot be empty"
                                      responseCode: "422"
                               Data2:
                                      tenantId:   "cristnolan"    
@@ -190,7 +190,7 @@ verifyLHInvalidFile:
                                      docName: "EmptyFile.txt"
                                      docMimeType: "text/plain"
                                      lhDocControlName: "acknowledgement_reminder_notice_attachments[]"   
-                                     errorMessage: "Acknowledgement reminder notice attachments file size must be greater than 0 Bytes"
+                                     errorMessage: "Acknowledgement reminder notice attachments file :Uploaded file cannot be empty"
                                      responseCode: "422"                               
                               Data3:
                                      tenantId:   "cristnolan"    
@@ -198,7 +198,7 @@ verifyLHInvalidFile:
                                      docName: "EmptyFile.txt"
                                      docMimeType: "text/plain"
                                      lhDocControlName: "hold_reminder_notice_attachments[]"
-                                     errorMessage: "Hold reminder notice attachments file size must be greater than 0 Bytes"
+                                     errorMessage: "Hold reminder notice attachments file :Uploaded file cannot be empty"
                                      responseCode: "422"                                     
                               Data4:
                                      tenantId:   "cristnolan"    
@@ -206,7 +206,7 @@ verifyLHInvalidFile:
                                      docName: "EmptyFile.txt"
                                      docMimeType: "text/plain"
                                      lhDocControlName: "release_notice_attachments[]"
-                                     errorMessage: "Release notice attachments file size must be greater than 0 Bytes"
+                                     errorMessage: "Release notice attachments file :Uploaded file cannot be empty"
                                      responseCode: "422"                                     
                               Data5:
                                      tenantId:   "cristnolan"    
@@ -214,7 +214,7 @@ verifyLHInvalidFile:
                                      docName: "EmptyFile.txt"
                                      docMimeType: "text/plain"
                                      lhDocControlName: "escalation_notice_attachments[]"
-                                     errorMessage: "Escalation notice attachments file size must be greater than 0 Bytes"
+                                     errorMessage: "Escalation notice attachments file :Uploaded file cannot be empty"
                                      responseCode: "422"
                               Data6:
                                      tenantId:   "cristnolan"    
@@ -222,7 +222,7 @@ verifyLHInvalidFile:
                                      docName: "BigFile.pdf"
                                      docMimeType: "application/pdf"
                                      lhDocControlName: "hold_notice_attachments[]"
-                                     errorMessage: "Hold notice attachments file size must be less than or equal to 5 MB"
+                                     errorMessage: "Hold notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422"
                               Data7:
                                      tenantId:   "cristnolan"    
@@ -230,7 +230,7 @@ verifyLHInvalidFile:
                                      docName: "BigFile.pdf"
                                      docMimeType: "application/pdf"
                                      lhDocControlName: "acknowledgement_reminder_notice_attachments[]"   
-                                     errorMessage: "Acknowledgement reminder notice attachments file size must be less than or equal to 5 MB"
+                                     errorMessage: "Acknowledgement reminder notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422"                               
                               Data8:
                                      tenantId:   "cristnolan"    
@@ -238,7 +238,7 @@ verifyLHInvalidFile:
                                      docName: "BigFile.pdf"
                                      docMimeType: "application/pdf"
                                      lhDocControlName: "hold_reminder_notice_attachments[]"
-                                     errorMessage: "Hold reminder notice attachments file size must be less than or equal to 5 MB"
+                                     errorMessage: "Hold reminder notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422"                                     
                               Data9:
                                      tenantId:   "cristnolan"    
@@ -246,7 +246,7 @@ verifyLHInvalidFile:
                                      docName: "BigFile.pdf"
                                      docMimeType: "application/pdf"
                                      lhDocControlName: "release_notice_attachments[]"
-                                     errorMessage: "Release notice attachments file size must be less than or equal to 5 MB"
+                                     errorMessage: "Release notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422"                                     
                               Data10:
                                      tenantId:   "cristnolan"    
@@ -254,7 +254,7 @@ verifyLHInvalidFile:
                                      docName: "BigFile.pdf"
                                      docMimeType: "application/pdf"
                                      lhDocControlName: "escalation_notice_attachments[]"
-                                     errorMessage: "Escalation notice attachments file size must be less than or equal to 5 MB"
+                                     errorMessage: "Escalation notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422"
                               Data11:
                                      tenantId:   "cristnolan"    
@@ -262,7 +262,7 @@ verifyLHInvalidFile:
                                      docName: "dbBackup.backup"
                                      docMimeType: "application/octet-stream"
                                      lhDocControlName: "hold_notice_attachments[]"
-                                     errorMessage: "Hold notice attachments file is not allowed, as it is potentially unsafe"
+                                     errorMessage: "Hold notice attachments file :Uploaded file is not allowed as it is potentially unsafe"
                                      responseCode: "422"                                                                                                              
                               Data12:
                                      tenantId:   "cristnolan"    
@@ -270,7 +270,7 @@ verifyLHInvalidFile:
                                      docName: "dbBackup.backup"
                                      docMimeType: "application/octet-stream"
                                      lhDocControlName: "acknowledgement_reminder_notice_attachments[]"
-                                     errorMessage: "Acknowledgement reminder notice attachments file is not allowed, as it is potentially unsafe"
+                                     errorMessage: "Acknowledgement reminder notice attachments file :Uploaded file is not allowed as it is potentially unsafe"
                                      responseCode: "422" 
                               Data13:
                                      tenantId:   "cristnolan"    
@@ -278,7 +278,7 @@ verifyLHInvalidFile:
                                      docName: "dbBackup.backup"
                                      docMimeType: "application/octet-stream"
                                      lhDocControlName: "hold_reminder_notice_attachments[]"
-                                     errorMessage: "Hold reminder notice attachments file is not allowed, as it is potentially unsafe"
+                                     errorMessage: "Hold reminder notice attachments file :Uploaded file is not allowed as it is potentially unsafe"
                                      responseCode: "422" 
                               Data14:
                                      tenantId:   "cristnolan"    
@@ -286,7 +286,7 @@ verifyLHInvalidFile:
                                      docName: "dbBackup.backup"
                                      docMimeType: "application/octet-stream"
                                      lhDocControlName: "release_notice_attachments[]"
-                                     errorMessage: "Release notice attachments file is not allowed, as it is potentially unsafe"
+                                     errorMessage: "Release notice attachments file :Uploaded file is not allowed as it is potentially unsafe"
                                      responseCode: "422" 
                               Data15:
                                      tenantId:   "cristnolan"    
@@ -294,15 +294,15 @@ verifyLHInvalidFile:
                                      docName: "dbBackup.backup"
                                      docMimeType: "application/octet-stream"
                                      lhDocControlName: "escalation_notice_attachments[]"
-                                     errorMessage: "Escalation notice attachments file is not allowed, as it is potentially unsafe"
-                                     responseCode: "422"
+                                     errorMessage: "Escalation notice attachments file :Uploaded file is not allowed as it is potentially unsafe"
+                                     responseCode: "422"   
                               Data16:
                                      tenantId:   "cristnolan"    
                                      matterId:   "5"  
                                      docName: "EmptyFile.txt,BigFile.pdf,dbBackup.backup"
                                      docMimeType: "text/plain,application/pdf,application/octet-stream"
                                      lhDocControlName: "hold_notice_attachments[]"
-                                     errorMessage: "Hold notice attachments file size must be greater than 0 Bytes&Hold notice attachments file size must be less than or equal to 5 MB&Hold notice attachments file is not allowed, as it is potentially unsafe"
+                                     errorMessage: "Hold notice attachments file :Uploaded file cannot be empty&Hold notice attachments file :Uploaded file is not allowed as it is potentially unsafe&Hold notice attachments  :Uploaded file size cannot exceed 5MB. Where 5MB is configured number at Site Level"
                                      responseCode: "422" 
 sendLegalHoldWithNoCustodians:      
                               Data1:
@@ -315,19 +315,47 @@ legalHoldWithInvalidCustodians:
                               Data1:
                                      tenantId:   "cristnolan"    
                                      matterId:   "5"
-                                     errorMessage: "Custodians are not valid"
-                                     responseCode: "422"
+                                     errorMessage: "[Invalid Custodian/Custodians]"
+                                     responseCode: "400"
                                      custodianId: ""       
                               Data2:
                                      tenantId:   "cristnolan"    
                                      matterId:   "5"
-                                     errorMessage: "Custodians are not valid"
-                                     responseCode: "422"
+                                     errorMessage: "[Invalid Custodian/Custodians]"
+                                     responseCode: "400"
                                      custodianId: "0,-36"
                               Data3:
                                      tenantId:   "cristnolan"    
                                      matterId:   "5"
-                                     errorMessage: "Custodians are not valid"
-                                     responseCode: "422"
+                                     errorMessage: "[Invalid Custodian/Custodians]"
+                                     responseCode: "400"
                                      custodianId: "0"  
+listAllCustodiansVariousPageSize:
+                              Data1:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "100"  
+                              Data2:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "20" 
+                              Data3:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "85" 
+                              Data4:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "5"  
+listAllCustodiansInvalidPageSize:
+                              Data1:
+                                     tenantId:   "cristnolan"   
+                              Data2:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "0" 
+                              Data3:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "-5" 
+                              Data4:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "500" 
+                              Data5:
+                                     tenantId:   "cristnolan"   
+                                     pageSize: "ABC"                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

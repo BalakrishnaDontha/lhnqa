@@ -22,7 +22,7 @@ public class LegalHoldRequestPojo {
 	NoticePojo release_notice_attributes;
 	@JsonIgnore
 	List<Filebuilder> allAttachments  = new ArrayList<Filebuilder>();
-	
+
 	public LegalHoldRequestPojo() {
 		draft=true;
 		name="QA Auto LH " + new Random().nextInt();
@@ -35,7 +35,6 @@ public class LegalHoldRequestPojo {
 		escalation_notice_attributes = new NoticePojo();
 		release_notice_attributes = new NoticePojo("release_include_active");
 		custodians = new ArrayList<Long>();
-		custodians.add(175L);
 	}
 
 	public boolean isDraft() {
@@ -122,7 +121,7 @@ public class LegalHoldRequestPojo {
 		allAttachments.add(files);
 		return this;
 	}
-	
+
 	public List<Filebuilder> obtainAllattachmentsOfLHN(){
 		return allAttachments;
 	}

@@ -2,7 +2,6 @@ package com.opentext.lhnqa.api.testcases.legalhold;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jayway.restassured.response.Response;
 import com.opentext.lhnqa.api.lib.testcases.ApiTestcaseBase;
 import com.opentext.lhnqa.api.lib.utils.ApiUtils.LegalHoldControlNames;
+import com.opentext.lhnqa.api.testcases.custodians.ListCustodians;
 import com.opentext.lhnqa.lib.domain.LHLinksPojo;
 import com.opentext.lhnqa.lib.domain.LegalHoldRequestPojo;
 import com.opentext.lhnqa.lib.domain.LegalHoldResponsePojo;
@@ -30,9 +30,11 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			SMOKE_GROUP }, priority = priority_LegalHold)
 	public void draftLegalHold(Map<String, String> testdata) throws IOException {
 
+		LOGGER.testCaseLog("Executing draftLegalHold ");
 		String endPoint = ENDPOINT_PATH.replace(PLACEHOLDER1,  testdata.get(DATA_TENANTID)) + MATTERS_PATH + "/" + testdata.get(DATA_MATTERID)+ LEGALHOLD_PATH;
 
 		LegalHoldRequestPojo request = new LegalHoldRequestPojo();
+		request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
 		request.attachDocumentsToLHN(apiUtil.attachDocumentsToLegalHold(testdata.get(DATA_DOC_NAME),testdata.get(DATA_DOC_MIMETYPE),LegalHoldControlNames.LHNOTICECONTROLNAME.getLabel()));
 		LOGGER.stepLog("Posting the LH request");
 		Response response = restUtil.postLHNRequest(endPoint, request);
@@ -78,6 +80,8 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			SMOKE_GROUP }, priority = priority_LegalHold)
 	public void verifyLHInvalidFile(Map<String, String> testdata) throws IOException  {
 
+		LOGGER.testCaseLog("Executing verifyLHInvalidFile ");
+
 		String endPoint = ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID)) + MATTERS_PATH + "/"
 				+ testdata.get(DATA_MATTERID) + LEGALHOLD_PATH;
 		List<Boolean> lhDraftStatus = Arrays.asList(true, false);
@@ -85,9 +89,10 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 		for (boolean status : lhDraftStatus) {
 			LegalHoldRequestPojo request = new LegalHoldRequestPojo();
 			request.setDraft(status);
+			request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
 			request.attachDocumentsToLHN(apiUtil.attachDocumentsToLegalHold(testdata.get(DATA_DOC_NAME),
 					testdata.get(DATA_DOC_MIMETYPE), testdata.get(LHDOCCONTROLNAME)));
-			LOGGER.stepLog("Posting the LH request");
+			LOGGER.stepLog("Posting the LH request with draft status " + status);
 			Response response = restUtil.postLHNRequest(endPoint, request);
 
 			Assert.assertNotNull(response, "Error in posting legal hold ");
@@ -96,7 +101,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			String[] errorMessages = testdata.get(DATA_ERROR_MESSAGE).split("&");
 			for (int i = 0; i < errorMessages.length; i++) {
 				Assert.assertEquals(response.jsonPath().getString("errors[" + i + "]"), errorMessages[i],
-						" Error message does not match");
+						" Error message does not match "+ response.jsonPath().getString("errors"));
 			}
 		}
 	}
@@ -106,6 +111,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			SMOKE_GROUP }, priority = priority_LegalHold)
 	public void sendLegalHoldWithNoCustodians(Map<String, String> testdata){
 
+		LOGGER.testCaseLog("Executing sendLegalHoldWithNoCustodians ");
 		String endPoint = ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID)) + MATTERS_PATH + "/"
 				+ testdata.get(DATA_MATTERID) + LEGALHOLD_PATH;
 
@@ -125,8 +131,9 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 
 	@Test(dataProvider = "ApiDataFromYml",description = "Verify invalid legal hold attachment", groups = { REGRESSION_GROUP,
 			SMOKE_GROUP }, priority = priority_LegalHold)
-	public void legalHoldWithInvalidCustodians(Map<String, String> testdata){
+	public void legalHoldWithInvalidCustodians(Map<String, String> testdata) throws JsonMappingException, JsonProcessingException{
 
+		LOGGER.testCaseLog("Executing legalHoldWithInvalidCustodians ");
 		String endPoint = ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID)) + MATTERS_PATH + "/"
 				+ testdata.get(DATA_MATTERID) + LEGALHOLD_PATH;
 		List<Boolean> lhDraftStatus = Arrays.asList(true, false);
@@ -136,13 +143,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			request.setDraft(status);
 
 			if (testdata.get(DATA_CUSTODIANID).isEmpty()) {
-				Map<String, String> parms = new HashMap<String, String>();
-				parms.put("matter_id", testdata.get(DATA_MATTERID));
-				Response custodiansResponse = restUtil.getJson(
-						ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID)) + CUSTODIANS_PATH, parms);
-				Long validCustodian = Long.valueOf(custodiansResponse.jsonPath().getInt("data[0].id"));
-				request.getCustodians().clear();
-				request.getCustodians().add(validCustodian);
+				request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
 				request.getCustodians().add(0L);
 			} else
 				request.setCustodians(Arrays.asList(testdata.get(DATA_CUSTODIANID).split(",")).stream()

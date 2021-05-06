@@ -1,6 +1,7 @@
 package com.opentext.lhnqa.api.testcases.custodians;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,8 @@ public class CreateCustodians extends ApiTestcaseBase {
 	static final ExtLogger LOGGER = new ExtLogger(CreateCustodians.class.toString());
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
-	public void createCustodian(Map<String, String> testdata)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
+	public void createValidCustodians(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException, ParseException {
 
 		LOGGER.testCaseLog("Executing createCustodian ");
@@ -50,19 +51,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void createCustodianVariousNames(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -84,19 +82,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
 		long custodianId = requestResponse.getId();
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void createCustodianNoSupervisor(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -119,19 +114,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void createCustodianNoDelegator(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -154,19 +146,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void createCustodianNoSupervisorAndDelegator(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -190,19 +179,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
 		long custodianId = requestResponse.getId();
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "Create a new custodian - https://ottr.opentext.com/test_case_node/show/2727339", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void createCustodianWithoutMandatoryAtrributes(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException, ParseException {
 
@@ -224,7 +210,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 	}
 
 	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiyCustodiansValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -244,21 +230,17 @@ public class CreateCustodians extends ApiTestcaseBase {
 		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
 		long custodianId = requestResponse.getId();
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
-
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 
 	}
 
 	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiySupervisorValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -278,21 +260,17 @@ public class CreateCustodians extends ApiTestcaseBase {
 		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
 		long custodianId = requestResponse.getId();
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
-
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 
 	}
 
 	@Test(dataProvider = "ValidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiyDelegatorValidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -312,20 +290,16 @@ public class CreateCustodians extends ApiTestcaseBase {
 		CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
 		long custodianId = requestResponse.getId();
 
-		Response getCustodian = restUtil.getJson(custodianEndPoint + "/" + custodianId);
-		Assert.assertNotNull(getCustodian, "Response of listing custodians is NULL");
-		Assert.assertEquals(getCustodian.statusCode(), HttpStatus.SC_OK, " Error in listing custodians response code ");
-
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = MAPPER.readValue(getCustodian.asString(), CustodianResponsePojo.class);
+		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
-				+ response.asString() + " And Get Custodian " + getCustodian.asString());
+				+ response.asString() + " And Get Custodian " + MAPPER.writeValueAsString(readResponse));
 	}
 
 	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiyCustodiansInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -346,7 +320,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 	}
 
 	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiySupervisorInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -366,7 +340,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 	}
 
 	@Test(dataProvider = "InvalidEmailId", description = "Verify email address of Custodians - https://ottr.opentext.com/test_case_node/show/2756916", groups = {
-			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_Custodians)
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void verfiyDelegatorInvalidEmail(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -386,7 +360,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 	}
 
 	@Test(dataProvider = "ApiDataFromYml", description = "get custodians with invalid id", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_Custodians)
+			SMOKE_GROUP }, priority = priority_CustodiansCreate)
 	public void getInvalidCustodian(Map<String, String> testdata) throws JsonMappingException, JsonProcessingException {
 
 		LOGGER.testCaseLog("Executing getInvalidCustodian ");
@@ -464,4 +438,65 @@ public class CreateCustodians extends ApiTestcaseBase {
 		}
 	}
 
+	public static List<Long> createCustodiansGetId(int noOfCustodians, String tenant) throws JsonProcessingException {
+
+		List<Long> custodians = new ArrayList<Long>();
+		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+
+		for (int count = 1; count <= noOfCustodians; count++) {
+			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+			Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
+			Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+					" Error in custodian create response code " + response.asString());
+			custodians.add(response.jsonPath().getLong("id"));
+		}
+
+		return custodians;
+	}
+
+	public static List<CustodianResponsePojo> createCustodiansGetResponse(int noOfCustodians, String tenant) throws JsonProcessingException {
+
+		List<CustodianResponsePojo> custodians = new ArrayList<CustodianResponsePojo>();
+		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
+		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
+
+		for (int count = 1; count <= noOfCustodians; count++) {
+			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+			Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
+			Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+					" Error in custodian create response code " + response.asString());
+			CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
+			custodians.add(requestResponse);
+		}
+
+		return custodians;
+	}
+
+
+	public static long createCustodianGetId(CustodiansRequestPojo custodianRequest, String tenant) throws JsonProcessingException {
+
+		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
+
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+				" Error in custodian create response code " + response.asString());
+
+		return response.jsonPath().getLong("id");
+	}
+
+	public static CustodianResponsePojo createCustodianGetResponse(CustodiansRequestPojo custodianRequest,
+			String tenant) throws JsonProcessingException {
+
+		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
+
+		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
+		Assert.assertNotNull(response,
+				"Response of creating custodian is NULL for " + MAPPER.writeValueAsString(custodianRequest));
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+				" Error in custodian create response code " + response.asString());
+
+		return MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
+	}
 }

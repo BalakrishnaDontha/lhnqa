@@ -7,10 +7,11 @@ public class CustodiansLinksPojo {
 
 	HrefPojo self;
 	HrefPojo legal_holds;
+	HrefPojo questionnaires;
 	HrefPojo stats;
 	HrefPojo matters;
-	
-	
+
+
 	public HrefPojo getSelf() {
 		return self;
 	}
@@ -35,28 +36,36 @@ public class CustodiansLinksPojo {
 	public void setMatters(HrefPojo matters) {
 		this.matters = matters;
 	}
-	
+
+	public HrefPojo getQuestionnaires() {
+		return questionnaires;
+	}
+	public void setQuestionnaires(HrefPojo questionnaires) {
+		this.questionnaires = questionnaires;
+	}
+
 	public List<String> obtainAllLinks() {
 		List<String>links = new ArrayList<String>();
 		links.add(getSelf().getHref());
 		links.add(getStats().getHref());
 		links.add(getLegal_holds()==null?null:getLegal_holds().getHref());
 		links.add(getMatters()==null?null:getMatters().getHref());
+		links.add(getQuestionnaires()==null?null:getQuestionnaires().getHref());
 		return links;
 	}
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((legal_holds == null) ? 0 : legal_holds.hashCode());
 		result = prime * result + ((matters == null) ? 0 : matters.hashCode());
+		result = prime * result + ((questionnaires == null) ? 0 : questionnaires.hashCode());
 		result = prime * result + ((self == null) ? 0 : self.hashCode());
 		result = prime * result + ((stats == null) ? 0 : stats.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -76,6 +85,11 @@ public class CustodiansLinksPojo {
 				return false;
 		} else if (!matters.equals(other.matters))
 			return false;
+		if (questionnaires == null) {
+			if (other.questionnaires != null)
+				return false;
+		} else if (!questionnaires.equals(other.questionnaires))
+			return false;
 		if (self == null) {
 			if (other.self != null)
 				return false;
@@ -88,7 +102,6 @@ public class CustodiansLinksPojo {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+
 }

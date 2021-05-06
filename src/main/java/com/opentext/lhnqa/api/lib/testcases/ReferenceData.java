@@ -28,6 +28,7 @@ public interface ReferenceData {
 	String DATA_CUSTODIAN_LNAME = "custodianLastName";
 	String DATA_CUSTODIAN_EMAIL = "custodianEmail";
 	String DATA_EMAIL_ID = "emailId";
+	String DATA_PAGE_SIZE = "pageSize";
 
 	// Test case Groups
 	String REGRESSION_GROUP = "Regression";
@@ -56,11 +57,12 @@ public interface ReferenceData {
 	String LEGALHOLD_ENDPOINT_PATH = ENDPOINT_PATH + LEGALHOLD_PATH;
 
 	// priority
-	int priority_Custodians = 1;
-	int priority_Matters = 2;
-	int priority_LegalHold = 3;
-	int priority_Folders = 4;
-	int priority_Tenant= 5;
+	int priority_CustodiansCreate = 1;
+	int priority_CustodiansList= 2;
+	int priority_Matters = 3;
+	int priority_LegalHold = 4;
+	int priority_Folders = 5;
+	int priority_Tenant= 6;
 
 	//error messages
 	String ERROR_HOLDNOTICE_EMPTYFILE = " notice attachments file size must be greater than 0 Bytes";
