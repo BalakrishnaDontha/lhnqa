@@ -31,7 +31,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 	public void createValidCustodians(Map<String, String> testdata)
 			throws JsonMappingException, JsonProcessingException, ParseException {
 
-		LOGGER.testCaseLog("Executing createCustodian ");
+		LOGGER.testCaseLog("Executing createValidCustodians ");
 
 		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID));
 		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
@@ -431,10 +431,10 @@ public class CreateCustodians extends ApiTestcaseBase {
 				custodianResponse.get_links().getSelf().getHref(), "Stats custodian link does not match");
 
 		List<String> allLinks = statsResponse.get_links().obtainAllLinks();
-		for (int i = 0; i < statsResponse.get_links().obtainAllLinks().size(); i++) {
+		for (int i = 0; i < allLinks.size(); i++) {
 			if (allLinks.get(i) != null)
-				Assert.assertEquals(restUtil.getJson(allLinks.get(i)).statusCode(), HttpStatus.SC_OK,
-						" Invalid response code for link " + allLinks.get(i));
+			Assert.assertEquals(restUtil.getJson(allLinks.get(i)).statusCode(), HttpStatus.SC_OK,
+					" Invalid response code for link " + allLinks.get(i));
 		}
 	}
 

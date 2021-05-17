@@ -14,10 +14,10 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="com.opentext.lhnqa.api.testcases.legalhold.CreateLegalHold">
-			<methods>
-			<include name="verifyLHInvalidFile"/>
-			</methods>
+			<class name="com.opentext.lhnqa.api.testcases.custodians.ListCustodians">
+			<!-- <methods>
+			<include name="createValidMatters"/>
+			</methods>-->
 			</class>
 		</classes>
 	</test>

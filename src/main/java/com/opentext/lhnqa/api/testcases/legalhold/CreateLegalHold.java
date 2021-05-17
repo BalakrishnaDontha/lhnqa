@@ -27,14 +27,14 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 
 
 	@Test(dataProvider = "ApiDataFromYml",description = "Draft legal hold", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_LegalHold)
+			SMOKE_GROUP }, priority = priority_LegalHoldCreate)
 	public void draftLegalHold(Map<String, String> testdata) throws IOException {
 
 		LOGGER.testCaseLog("Executing draftLegalHold ");
 		String endPoint = ENDPOINT_PATH.replace(PLACEHOLDER1,  testdata.get(DATA_TENANTID)) + MATTERS_PATH + "/" + testdata.get(DATA_MATTERID)+ LEGALHOLD_PATH;
 
 		LegalHoldRequestPojo request = new LegalHoldRequestPojo();
-		request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
+		request.getCustodians().addAll(ListCustodians.getGlobalCustodians(1,  testdata.get(DATA_TENANTID)));
 		request.attachDocumentsToLHN(apiUtil.attachDocumentsToLegalHold(testdata.get(DATA_DOC_NAME),testdata.get(DATA_DOC_MIMETYPE),LegalHoldControlNames.LHNOTICECONTROLNAME.getLabel()));
 		LOGGER.stepLog("Posting the LH request");
 		Response response = restUtil.postLHNRequest(endPoint, request);
@@ -59,7 +59,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 
 
 	@Test(dataProvider = "ApiDataFromYml",description = "get legal hold with valid id", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_LegalHold)
+			SMOKE_GROUP }, priority = priority_LegalHoldCreate)
 	public void getLegalHold(Map<String, String> testdata) throws JsonMappingException, JsonProcessingException  {
 
 		LOGGER.testCaseLog("Executing getLegalHold ");
@@ -77,7 +77,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 
 
 	@Test(dataProvider = "ApiDataFromYml",description = "Verify invalid legal hold attachment", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_LegalHold)
+			SMOKE_GROUP }, priority = priority_LegalHoldCreate)
 	public void verifyLHInvalidFile(Map<String, String> testdata) throws IOException  {
 
 		LOGGER.testCaseLog("Executing verifyLHInvalidFile ");
@@ -89,7 +89,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 		for (boolean status : lhDraftStatus) {
 			LegalHoldRequestPojo request = new LegalHoldRequestPojo();
 			request.setDraft(status);
-			request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
+			request.getCustodians().addAll(ListCustodians.getGlobalCustodians(1,  testdata.get(DATA_TENANTID)));
 			request.attachDocumentsToLHN(apiUtil.attachDocumentsToLegalHold(testdata.get(DATA_DOC_NAME),
 					testdata.get(DATA_DOC_MIMETYPE), testdata.get(LHDOCCONTROLNAME)));
 			LOGGER.stepLog("Posting the LH request with draft status " + status);
@@ -108,7 +108,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 
 
 	@Test(dataProvider = "ApiDataFromYml",description = "Verify invalid legal hold attachment", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_LegalHold)
+			SMOKE_GROUP }, priority = priority_LegalHoldCreate)
 	public void sendLegalHoldWithNoCustodians(Map<String, String> testdata){
 
 		LOGGER.testCaseLog("Executing sendLegalHoldWithNoCustodians ");
@@ -130,7 +130,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 	}
 
 	@Test(dataProvider = "ApiDataFromYml",description = "Verify invalid legal hold attachment", groups = { REGRESSION_GROUP,
-			SMOKE_GROUP }, priority = priority_LegalHold)
+			SMOKE_GROUP }, priority = priority_LegalHoldCreate)
 	public void legalHoldWithInvalidCustodians(Map<String, String> testdata) throws JsonMappingException, JsonProcessingException{
 
 		LOGGER.testCaseLog("Executing legalHoldWithInvalidCustodians ");
@@ -143,7 +143,7 @@ public class CreateLegalHold  extends ApiTestcaseBase {
 			request.setDraft(status);
 
 			if (testdata.get(DATA_CUSTODIANID).isEmpty()) {
-				request.getCustodians().addAll(ListCustodians.getAnyCustodians(1,  testdata.get(DATA_TENANTID)));
+				request.getCustodians().addAll(ListCustodians.getGlobalCustodians(1,  testdata.get(DATA_TENANTID)));
 				request.getCustodians().add(0L);
 			} else
 				request.setCustodians(Arrays.asList(testdata.get(DATA_CUSTODIANID).split(",")).stream()

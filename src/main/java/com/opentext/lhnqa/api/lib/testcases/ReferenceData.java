@@ -57,12 +57,16 @@ public interface ReferenceData {
 	String LEGALHOLD_ENDPOINT_PATH = ENDPOINT_PATH + LEGALHOLD_PATH;
 
 	// priority
-	int priority_CustodiansCreate = 1;
-	int priority_CustodiansList= 2;
-	int priority_Matters = 3;
-	int priority_LegalHold = 4;
-	int priority_Folders = 5;
-	int priority_Tenant= 6;
+	int priority_TenantCreate= 10;
+	int priority_TenantUpdate= 11;
+	int priority_FoldersCreate = 20;
+	int priority_FoldersUpdate = 21;
+	int priority_CustodiansCreate = 30;
+	int priority_CustodiansList= 31;
+	int priority_MattersCreate = 40;
+	int priority_MattersUpdate = 41;
+	int priority_LegalHoldCreate = 50;
+	int priority_LegalHoldUpdate = 51;
 
 	//error messages
 	String ERROR_HOLDNOTICE_EMPTYFILE = " notice attachments file size must be greater than 0 Bytes";

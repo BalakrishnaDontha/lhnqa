@@ -118,7 +118,7 @@ public class ListCustodians extends ApiTestcaseBase  {
 	}
 
 
-	public static List<Long> getAnyCustodians(int noOfCustodians,String tenantId)
+	public static List<Long> getGlobalCustodians(int noOfCustodians,String tenantId)
 			throws JsonMappingException, JsonProcessingException {
 
 		//This will work for 'noOfCustodians' count up to 100
@@ -145,5 +145,52 @@ public class ListCustodians extends ApiTestcaseBase  {
 			custodianIds.addAll(CreateCustodians.createCustodiansGetId(noOfCustodians - custodianIds.size(), tenantId));
 		}
 		return custodianIds;
+	}
+
+
+	public static List<Long> getAllGlobalCustodians(String tenantId)
+			throws JsonMappingException, JsonProcessingException {
+
+		List<Long> custodianIds = new ArrayList<Long>();
+		String nextUrl = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId) + "?page_size=100";
+		boolean hasMore = false;
+
+		do {
+			Response getCustodians = restUtil.getJson(nextUrl);
+			Assert.assertNotNull(getCustodians, "Response of listing custodian is NULL");
+			Assert.assertEquals(getCustodians.statusCode(), HttpStatus.SC_OK, " Error in listing custodian response code ");
+
+			CustodiansListResponsePojo requestResponse = MAPPER.readValue(getCustodians.asString(),CustodiansListResponsePojo.class);
+			custodianIds.addAll(requestResponse.get_embedded().getCustodians().stream().map(custodian -> custodian.getId()).collect(Collectors.toList()));
+			hasMore = requestResponse.getPage().isHas_more();
+			nextUrl = hasMore ?requestResponse.get_links().getNext().getHref():null;
+
+		}while(hasMore);
+
+		return custodianIds;
+	}
+
+	public static List<CustodianResponsePojo> getAllCustodiansFromListResponse(
+			CustodiansListResponsePojo custodiansListResponse) throws JsonMappingException, JsonProcessingException {
+
+		List<CustodianResponsePojo> custodianList = new ArrayList<CustodianResponsePojo>();
+		custodianList.addAll(custodiansListResponse.get_embedded().getCustodians());
+		boolean hasMore = custodiansListResponse.getPage().isHas_more();
+		String nextPageUrl = hasMore ? custodiansListResponse.get_links().getNext().getHref() : null;
+
+		while (hasMore) {
+			Response response = restUtil.getJson(nextPageUrl);
+			Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+					" Error in custodian list response code " + response.asString());
+			CustodiansListResponsePojo requestResponse = MAPPER.readValue(response.asString(),
+					CustodiansListResponsePojo.class);
+			Assert.assertEquals(nextPageUrl, requestResponse.get_links().getSelf().getHref(),
+					"Self link does not match");
+			custodianList.addAll(requestResponse.get_embedded().getCustodians());
+			hasMore = requestResponse.getPage().isHas_more();
+			nextPageUrl = hasMore ? requestResponse.get_links().getNext().getHref() : null;
+		}
+
+		return custodianList;
 	}
 }
