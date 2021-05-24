@@ -8,8 +8,8 @@ public class MatterContactPojo {
 	String email;
 
 	public MatterContactPojo() {
-		name = "MatCan" +  new Random().nextInt(1000);
-		email = "MatCamemail@otxyz.com";
+		name = "MatCon" +  new Random().nextInt(1000);
+		email = "MatConemail@otxyz.com";
 	}
 
 	public String getName() {

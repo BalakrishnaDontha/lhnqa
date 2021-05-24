@@ -29,6 +29,8 @@ public interface ReferenceData {
 	String DATA_CUSTODIAN_EMAIL = "custodianEmail";
 	String DATA_EMAIL_ID = "emailId";
 	String DATA_PAGE_SIZE = "pageSize";
+	String DATA_NAME = "name";
+	String DATA_NUMBER = "number";
 
 	// Test case Groups
 	String REGRESSION_GROUP = "Regression";
@@ -73,6 +75,8 @@ public interface ReferenceData {
 	String ERROR_EMAIL_CUSTODIAN = "Email is invalid";
 	String ERROR_EMAIL_SUPERVISOR = "Supervisor email is invalid";
 	String ERROR_EMAIL_DELEGATOR = "Delegate email is invalid";
+	String ERROR_EMPTY_ATTRIBUTE = "can't be blank";
+	String ERROR_INVALID_CUSTODIANS = "Invalid Custodian/Custodians";
 
 	//Email
 	String[]  VALID_EMAIL_ADDRESS = {"simple@example.com","very.common@example.com","disposable.style.email.with+symbol@example.com","other.email-with-hyphen@example.com",

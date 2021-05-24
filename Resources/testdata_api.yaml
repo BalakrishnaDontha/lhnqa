@@ -161,7 +161,31 @@ invalidEmailId:
                                      tenantId:   "cristnolan" 
 createValidMatters:
                               Data1:
-                                     tenantId:   "cristnolan"                                                                                                                                                                                                                                                                 
+                                     tenantId:   "cristnolan"
+                                     custodianId: "true"
+                              Data2:
+                                     tenantId:   "cristnolan"
+createMatterWithNoNameNumber:
+                              Data1:
+                                     tenantId:   "cristnolan"
+                                     number: "123456"
+                                     errorMessage: "name"
+                              Data2:
+                                     tenantId:   "cristnolan"
+                                     name: "matter1234"
+                                     errorMessage: "number"
+                              Data3:
+                                     tenantId:   "cristnolan"
+                                     errorMessage: "name,number"
+createMatterWithInvalidCustodians:
+                              Data1:
+                                     tenantId:   "cristnolan"
+                                     custodianId: "true"
+                              Data2:
+                                     tenantId:   "cristnolan"
+createMatterWithNoOptionalData:
+                              Data1:
+                                     tenantId:   "cristnolan"
 getLegalHold:
                               Data1:
                                      tenantId:   "cristnolan"    

@@ -1,6 +1,7 @@
 package com.opentext.lhnqa.api.testcases.matters;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import com.opentext.lhnqa.api.testcases.custodians.CreateCustodians;
 import com.opentext.lhnqa.api.testcases.custodians.ListCustodians;
 import com.opentext.lhnqa.lib.domain.CustodianResponsePojo;
 import com.opentext.lhnqa.lib.domain.CustodiansListResponsePojo;
+import com.opentext.lhnqa.lib.domain.HrefPojo;
 import com.opentext.lhnqa.lib.domain.MatterRequestPojo;
 import com.opentext.lhnqa.lib.domain.MatterResponsePojo;
 import com.opentext.lhnqa.lib.domain.MatterStatsPojo;
@@ -41,8 +43,11 @@ public class CreateMatters extends ApiTestcaseBase {
 		String tenantId =  testdata.get(DATA_TENANTID);
 		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
 		MatterRequestPojo matterRequest = new MatterRequestPojo();
-		matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(2,tenantId));
-		matterRequest.setCustodianMatterCount(getCustodiansMatterCount(tenantId,matterRequest.getCustodians_ids()));
+		if (testdata.get(DATA_CUSTODIANID) != null) {
+			matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(2, tenantId));
+			matterRequest
+					.setCustodianMatterCount(getCustodiansMatterCount(tenantId, matterRequest.getCustodians_ids()));
+		}
 
 		LOGGER.stepLog("Posting the matter create request");
 		Response response = restUtil.postLHNJson(matterEndPoint, matterRequest);
@@ -52,9 +57,9 @@ public class CreateMatters extends ApiTestcaseBase {
 
 		LOGGER.stepLog("Reading the POST Matter response");
 		MatterResponsePojo requestResponse = MAPPER.readValue(response.asString(), MatterResponsePojo.class);
-		Assert.assertTrue((new Date().getTime() - requestResponse.fetchCreatedAtInDateFormat().getTime()) < 100000,
+		Assert.assertTrue((new Date().getTime() - requestResponse.fetchCreatedAtInDateFormat().getTime()) < 120000,
 				"Matter creation timestamp does not match");
-		Assert.assertTrue((new Date().getTime() - requestResponse.fetchUpdatedAtInDateFormat().getTime()) < 100000,
+		Assert.assertTrue((new Date().getTime() - requestResponse.fetchUpdatedAtInDateFormat().getTime()) < 120000,
 				"Matter Update timestamp does not match");
 		verifyNewMatterSubLinks(tenantId, matterRequest,requestResponse);
 
@@ -72,15 +77,125 @@ public class CreateMatters extends ApiTestcaseBase {
 	}
 
 
+	@Test(dataProvider = "ApiDataFromYml", description = "https://ottr.opentext.com/test_case_node/show/2756917", groups = {
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_MattersCreate)
+	public void createMatterWithNoNameNumber(Map<String, String> testdata)
+			throws JsonMappingException, JsonProcessingException, ParseException {
+
+		LOGGER.testCaseLog("Executing createMatterWithNoNameNumber ");
+
+		String tenantId =  testdata.get(DATA_TENANTID);
+		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
+		MatterRequestPojo matterRequest = new MatterRequestPojo();
+		matterRequest.setName(testdata.get(DATA_NAME));
+		matterRequest.setNumber(testdata.get(DATA_NUMBER));
+		matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(2,tenantId));
+
+
+		LOGGER.stepLog("Posting the matter create request");
+		Response response = restUtil.postLHNJson(matterEndPoint, matterRequest);
+		Assert.assertNotNull(response, "Response of posting matter is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY,
+				" Able to create matter without matter name/number " + response.asString());
+		List<String> expectedErrorAttribute = Arrays.asList(testdata.get(DATA_ERROR_MESSAGE).split(",")).stream().map(msg -> "/data/attributes/" + msg).collect(Collectors.toList());
+		List<String> expectedErrorMessage = Arrays.asList(testdata.get(DATA_ERROR_MESSAGE).split(",")).stream().map(msg -> ERROR_EMPTY_ATTRIBUTE).collect(Collectors.toList());
+		Assert.assertEquals(response.jsonPath().getList("errors.source.pointer"),expectedErrorAttribute
+				,"Attribute name does not match "  + response.asString());
+		Assert.assertEquals(response.jsonPath().getList("errors.detail"),
+				expectedErrorMessage,"Attribute name does not match "  + response.asString());
+
+	}
+
+
+	@Test(dataProvider = "ApiDataFromYml", description = "https://ottr.opentext.com/test_case_node/show/2756917", groups = {
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_MattersCreate)
+	public void createMatterWithInvalidCustodians(Map<String, String> testdata)
+			throws JsonMappingException, JsonProcessingException, ParseException {
+
+		LOGGER.testCaseLog("Executing createMatterWithInvalidCustodians ");
+
+		String tenantId =  testdata.get(DATA_TENANTID);
+		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
+		MatterRequestPojo matterRequest = new MatterRequestPojo();
+		if (testdata.get(DATA_CUSTODIANID) == null) {
+			matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(1, tenantId));
+		}
+		matterRequest.getCustodians_ids().add(0L);
+
+		LOGGER.stepLog("Posting the matter create request");
+		Response response = restUtil.postLHNJson(matterEndPoint, matterRequest);
+		Assert.assertNotNull(response, "Response of posting matter is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_BAD_REQUEST,
+				" Able to create matter with invalid custodians " + response.asString());
+		Assert.assertEquals(response.jsonPath().getList("errors"),Arrays.asList(ERROR_INVALID_CUSTODIANS)
+				,"Error message does not match "  + response.asString());
+	}
+
+
+	@Test(dataProvider = "ApiDataFromYml", description = "https://ottr.opentext.com/test_case_node/show/2735999", groups = {
+			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_MattersCreate)
+	public void createMatterWithNoOptionalData(Map<String, String> testdata)
+			throws JsonMappingException, JsonProcessingException, ParseException {
+
+		LOGGER.testCaseLog("Executing createMatterWithNoOptionalData ");
+
+		String tenantId =  testdata.get(DATA_TENANTID);
+		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
+		MatterRequestPojo matterRequest = new MatterRequestPojo();
+		matterRequest.setNotes(null);
+		matterRequest.setCaption(null);
+		matterRequest.setPo_number(null);
+		matterRequest.setCase_number(null);
+		matterRequest.setBusiness_unit(null);
+		matterRequest.setRegion(null);
+		matterRequest.setMatter_contacts_attributes(null);
+		matterRequest.setEmail_display_name(null);
+		matterRequest.setEmail_reply_to(null);
+		matterRequest.setEmail_notification_text(null);
+
+		LOGGER.stepLog("Posting the matter create request");
+		Response response = restUtil.postLHNJson(matterEndPoint, matterRequest);
+		Assert.assertNotNull(response, "Response of posting matter is NULL");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
+				" Error in matter create response code " + response.asString());
+
+		LOGGER.stepLog("Reading the POST Matter response");
+		MatterResponsePojo requestResponse = MAPPER.readValue(response.asString(), MatterResponsePojo.class);
+		verifyNewMatterSubLinks(tenantId, matterRequest,requestResponse);
+
+		long matterId = requestResponse.getId();
+		LOGGER.stepLog("Reading the GET Matter response");
+		Response getResponse = restUtil.getJson(matterEndPoint+"/"+matterId);
+		Assert.assertNotNull(getResponse, "Response of posting matter is NULL");
+		Assert.assertEquals(getResponse.statusCode(), HttpStatus.SC_OK,
+				" Error in matter create response code " + getResponse.asString());
+		MatterResponsePojo readResponse = MAPPER.readValue(getResponse.asString(), MatterResponsePojo.class);
+
+		LOGGER.stepLog("Validate the Matter response");
+		Assert.assertEquals(requestResponse, readResponse, "Matter data does not match -> Request Matter "
+				+ response.asString() + " And Matter Custodian " + MAPPER.writeValueAsString(readResponse));
+	}
+
 	public static void verifyNewMatterSubLinks(String tenantID, MatterRequestPojo matterRequest ,MatterResponsePojo matterResponse)
 			throws JsonMappingException, JsonProcessingException {
 
-		String matterlink = restUtil.getBaseEndpoint() + MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantID)+"/"+matterResponse.getId();
-		Assert.assertEquals(matterResponse.get_links().getSelf().getHref(),matterlink,
+		String matterlink = restUtil.getBaseEndpoint() + MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantID) + "/"
+				+ matterResponse.getId();
+		Assert.assertEquals(matterResponse.get_links().getSelf().getHref(), matterlink,
 				"Matter self link does not match");
+		Assert.assertNull(matterResponse.get_links().getLegal_holds(), "Legal hold link is available for new matter");
+
 		verifyMatterSubLinksAccess(matterResponse);
-		verifyNewMatterSubLinkStats(matterRequest,matterResponse);
-		verifyNewMatterSubLinkCustodians(matterRequest,matterResponse);
+		verifyNewMatterSubLinkStats(matterRequest, matterResponse);
+
+		HrefPojo custodianLink = matterRequest.getCustodians_ids().size() > 0
+				? matterResponse.get_links().getCustodians()
+				: null;
+		Assert.assertEquals(custodianLink, matterResponse.get_links().getCustodians(),
+				"Custodian link is available when no custodians in matter");
+		if (custodianLink != null) {
+			verifyNewMatterSubLinkCustodians(matterRequest, matterResponse);
+		}
 	}
 
 
@@ -135,12 +250,16 @@ public class CreateMatters extends ApiTestcaseBase {
 		Assert.assertEquals(custodiansResponseJson.statusCode(), HttpStatus.SC_OK,
 				" Error in custodian stats response code " + custodiansResponseJson.asString());
 
-		CustodiansListResponsePojo custodiansResponse = MAPPER.readValue(custodiansResponseJson.asString(), CustodiansListResponsePojo.class);
-		Assert.assertEquals(custodiansResponse.get_links().getSelf().getHref(), custodiansLink, "Custodian self link does not match");
-		Assert.assertEquals(custodiansResponse.getPage().getTotal_count(), matterRequest.getCustodians_ids().size(), "Custodians Count does not match");
+		CustodiansListResponsePojo custodiansResponse = MAPPER.readValue(custodiansResponseJson.asString(),
+				CustodiansListResponsePojo.class);
+		Assert.assertEquals(custodiansResponse.get_links().getSelf().getHref(), custodiansLink,
+				"Custodian self link does not match");
+		Assert.assertEquals(custodiansResponse.getPage().getTotal_count(), matterRequest.getCustodians_ids().size(),
+				"Custodians Count does not match");
 
 		List<CustodianResponsePojo> custodianList = ListCustodians.getAllCustodiansFromListResponse(custodiansResponse);
-		List<Long> responseCustodianIdList = custodianList.stream().map(cust -> cust.getId()).collect(Collectors.toList());
+		List<Long> responseCustodianIdList = custodianList.stream().map(cust -> cust.getId())
+				.collect(Collectors.toList());
 		Collections.sort(responseCustodianIdList);
 		Assert.assertEquals(requestCustodianIdList, responseCustodianIdList, " Custodians list does not match ");
 		Map<Long, Long> custodianMatterCount = new HashMap<Long, Long>();
@@ -151,9 +270,11 @@ public class CreateMatters extends ApiTestcaseBase {
 			Assert.assertEquals(mattersResponseJson.statusCode(), HttpStatus.SC_OK,
 					" Error in matter stats response code " + mattersResponseJson.asString());
 
-			MattersListResponsePojo mattersResponse = MAPPER.readValue(mattersResponseJson.asString(), MattersListResponsePojo.class);
+			MattersListResponsePojo mattersResponse = MAPPER.readValue(mattersResponseJson.asString(),
+					MattersListResponsePojo.class);
 			List<MatterResponsePojo> matterList = ListMatters.getAllMattersFromListResponse(mattersResponse);
-			Assert.assertTrue(matterList.stream().map(mat -> mat.getId()).collect(Collectors.toList()).contains(matterResponse.getId()),"Matter does not added to the custodian");
+			Assert.assertTrue(matterList.stream().map(mat -> mat.getId()).collect(Collectors.toList())
+					.contains(matterResponse.getId()), "Matter does not added to the custodian");
 
 			String statsLink = custodian.get_links().getStats().getHref();
 			Response statsResponseJson = restUtil.getJson(statsLink);
@@ -163,11 +284,12 @@ public class CreateMatters extends ApiTestcaseBase {
 			custodianMatterCount.put(custodian.getId(), statsResponseJson.jsonPath().getLong("total_matters"));
 		}
 
-		for(Long CustodianId: custodianMatterCount.keySet()) {
-		Assert.assertTrue(custodianMatterCount.get(CustodianId).equals(matterRequest.getCustodianMatterCount().get(CustodianId)+1L),
-				" Custodiam total matter count not incremented ");
+		for (Long CustodianId : custodianMatterCount.keySet()) {
+			Assert.assertTrue(
+					custodianMatterCount.get(CustodianId)
+							.equals(matterRequest.getCustodianMatterCount().get(CustodianId) + 1L),
+					" Custodiam total matter count not incremented ");
 		}
-
 	}
 
 	public static Map<Long, Long> getCustodiansMatterCount(String tenantID,List<Long> custodianIds){
