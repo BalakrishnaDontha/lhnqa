@@ -1,7 +1,6 @@
 package com.opentext.lhnqa.api.testcases.custodians;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jayway.restassured.response.Response;
+import com.opentext.lhnqa.api.lib.helper.CustodiansListHelper;
 import com.opentext.lhnqa.api.lib.testcases.ApiTestcaseBase;
 import com.opentext.lhnqa.lib.domain.CustodianResponsePojo;
 import com.opentext.lhnqa.lib.domain.CustodianStatsPojo;
@@ -52,7 +52,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -83,7 +83,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -115,7 +115,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -147,7 +147,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		verifyNewCustodianSubLinks(testdata.get(DATA_TENANTID), requestResponse);
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -180,7 +180,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -231,7 +231,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -261,7 +261,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -291,7 +291,7 @@ public class CreateCustodians extends ApiTestcaseBase {
 		long custodianId = requestResponse.getId();
 
 		LOGGER.stepLog("Reading the GET custodian response");
-		CustodianResponsePojo readResponse = ListCustodians.getCustodian(custodianId,testdata.get(DATA_TENANTID));
+		CustodianResponsePojo readResponse = CustodiansListHelper.getCustodian(custodianId,testdata.get(DATA_TENANTID));
 
 		LOGGER.stepLog("Validate the custodian response");
 		Assert.assertEquals(requestResponse, readResponse, "Custodian data does not match -> Request custodian "
@@ -438,65 +438,5 @@ public class CreateCustodians extends ApiTestcaseBase {
 		}
 	}
 
-	public static List<Long> createCustodiansGetId(int noOfCustodians, String tenant) throws JsonProcessingException {
 
-		List<Long> custodians = new ArrayList<Long>();
-		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
-		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-
-		for (int count = 1; count <= noOfCustodians; count++) {
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
-			Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
-					" Error in custodian create response code " + response.asString());
-			custodians.add(response.jsonPath().getLong("id"));
-		}
-
-		return custodians;
-	}
-
-	public static List<CustodianResponsePojo> createCustodiansGetResponse(int noOfCustodians, String tenant) throws JsonProcessingException {
-
-		List<CustodianResponsePojo> custodians = new ArrayList<CustodianResponsePojo>();
-		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
-		CustodiansRequestPojo custodianRequest = new CustodiansRequestPojo();
-
-		for (int count = 1; count <= noOfCustodians; count++) {
-			Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-			Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
-			Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
-					" Error in custodian create response code " + response.asString());
-			CustodianResponsePojo requestResponse = MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
-			custodians.add(requestResponse);
-		}
-
-		return custodians;
-	}
-
-
-	public static long createCustodianGetId(CustodiansRequestPojo custodianRequest, String tenant) throws JsonProcessingException {
-
-		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
-
-		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-		Assert.assertNotNull(response, "Response of creating custodian is NULL for "+ MAPPER.writeValueAsString(custodianRequest));
-		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
-				" Error in custodian create response code " + response.asString());
-
-		return response.jsonPath().getLong("id");
-	}
-
-	public static CustodianResponsePojo createCustodianGetResponse(CustodiansRequestPojo custodianRequest,
-			String tenant) throws JsonProcessingException {
-
-		String custodianEndPoint = CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenant);
-
-		Response response = restUtil.postLHNJson(custodianEndPoint, custodianRequest);
-		Assert.assertNotNull(response,
-				"Response of creating custodian is NULL for " + MAPPER.writeValueAsString(custodianRequest));
-		Assert.assertEquals(response.statusCode(), HttpStatus.SC_OK,
-				" Error in custodian create response code " + response.asString());
-
-		return MAPPER.readValue(response.asString(), CustodianResponsePojo.class);
-	}
 }

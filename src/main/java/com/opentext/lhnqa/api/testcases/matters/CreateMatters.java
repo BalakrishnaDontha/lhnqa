@@ -17,9 +17,9 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jayway.restassured.response.Response;
+import com.opentext.lhnqa.api.lib.helper.CustodiansListHelper;
 import com.opentext.lhnqa.api.lib.testcases.ApiTestcaseBase;
 import com.opentext.lhnqa.api.testcases.custodians.CreateCustodians;
-import com.opentext.lhnqa.api.testcases.custodians.ListCustodians;
 import com.opentext.lhnqa.lib.domain.CustodianResponsePojo;
 import com.opentext.lhnqa.lib.domain.CustodiansListResponsePojo;
 import com.opentext.lhnqa.lib.domain.HrefPojo;
@@ -44,7 +44,7 @@ public class CreateMatters extends ApiTestcaseBase {
 		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
 		MatterRequestPojo matterRequest = new MatterRequestPojo();
 		if (testdata.get(DATA_CUSTODIANID) != null) {
-			matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(2, tenantId));
+			matterRequest.getCustodians_ids().addAll(CustodiansListHelper.getGlobalCustodians(2, tenantId));
 			matterRequest
 					.setCustodianMatterCount(getCustodiansMatterCount(tenantId, matterRequest.getCustodians_ids()));
 		}
@@ -89,7 +89,7 @@ public class CreateMatters extends ApiTestcaseBase {
 		MatterRequestPojo matterRequest = new MatterRequestPojo();
 		matterRequest.setName(testdata.get(DATA_NAME));
 		matterRequest.setNumber(testdata.get(DATA_NUMBER));
-		matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(2,tenantId));
+		matterRequest.getCustodians_ids().addAll(CustodiansListHelper.getGlobalCustodians(2,tenantId));
 
 
 		LOGGER.stepLog("Posting the matter create request");
@@ -118,7 +118,7 @@ public class CreateMatters extends ApiTestcaseBase {
 		String matterEndPoint = MATTERS_ENDPOINT_PATH.replace(PLACEHOLDER1, tenantId);
 		MatterRequestPojo matterRequest = new MatterRequestPojo();
 		if (testdata.get(DATA_CUSTODIANID) == null) {
-			matterRequest.getCustodians_ids().addAll(ListCustodians.getGlobalCustodians(1, tenantId));
+			matterRequest.getCustodians_ids().addAll(CustodiansListHelper.getGlobalCustodians(1, tenantId));
 		}
 		matterRequest.getCustodians_ids().add(0L);
 
@@ -257,7 +257,7 @@ public class CreateMatters extends ApiTestcaseBase {
 		Assert.assertEquals(custodiansResponse.getPage().getTotal_count(), matterRequest.getCustodians_ids().size(),
 				"Custodians Count does not match");
 
-		List<CustodianResponsePojo> custodianList = ListCustodians.getAllCustodiansFromListResponse(custodiansResponse);
+		List<CustodianResponsePojo> custodianList = CustodiansListHelper.getAllCustodiansFromListResponse(custodiansResponse);
 		List<Long> responseCustodianIdList = custodianList.stream().map(cust -> cust.getId())
 				.collect(Collectors.toList());
 		Collections.sort(responseCustodianIdList);
