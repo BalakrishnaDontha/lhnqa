@@ -9,6 +9,7 @@ import com.opentext.lhnqa.api.lib.testcases.ReferenceData;
 public class CustodianResponsePojo {
 
 	long id;
+	String name;
 	String first_name;
 	String last_name;
 	String email;
@@ -35,6 +36,12 @@ public class CustodianResponsePojo {
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getFirst_name() {
 		return first_name;
@@ -190,6 +197,7 @@ public class CustodianResponsePojo {
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((supervisor_email == null) ? 0 : supervisor_email.hashCode());
 		result = prime * result + ((supervisor_name == null) ? 0 : supervisor_name.hashCode());
@@ -197,6 +205,7 @@ public class CustodianResponsePojo {
 		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -284,6 +293,11 @@ public class CustodianResponsePojo {
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (phone == null) {
 			if (other.phone != null)
 				return false;
@@ -311,7 +325,6 @@ public class CustodianResponsePojo {
 			return false;
 		return true;
 	}
-
 
 
 }

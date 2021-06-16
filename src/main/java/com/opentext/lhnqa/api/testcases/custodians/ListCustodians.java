@@ -23,6 +23,22 @@ public class ListCustodians extends ApiTestcaseBase  {
 
 	static final ExtLogger LOGGER = new ExtLogger(ListCustodians.class.toString());
 
+
+	@Test(dataProvider = "ApiDataFromYml", description = "get custodians with invalid id", groups = { REGRESSION_GROUP,
+			SMOKE_GROUP }, priority = priority_CustodiansCreate)
+	public void getInvalidCustodian(Map<String, String> testdata) throws JsonMappingException, JsonProcessingException {
+
+		LOGGER.testCaseLog("Executing getInvalidCustodian ");
+
+		String custodianId = testdata.get("custodianId");
+
+		Response response = restUtil.getJson(
+				CUSTODIANS_ENDPOINT_PATH.replace(PLACEHOLDER1, testdata.get(DATA_TENANTID)) + "/" + custodianId);
+		Assert.assertNotNull(response, "Error in listing custodians");
+		Assert.assertEquals(response.statusCode(), HttpStatus.SC_NOT_FOUND,
+				" Error in listing custodian response code ");
+	}
+
 	@Test(dataProvider = "ApiDataFromYml", description = "Get all custodians - https://ottr.opentext.com/test_case_node/show/2727405", groups = {
 			REGRESSION_GROUP, SMOKE_GROUP }, priority = priority_CustodiansList)
 	public void listAllCustodiansVariousPageSize(Map<String, String> testdata)

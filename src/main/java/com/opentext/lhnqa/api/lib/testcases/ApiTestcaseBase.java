@@ -13,6 +13,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.xml.XmlTest;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opentext.lhnqa.api.lib.utils.ApiUtils;
@@ -27,6 +28,8 @@ public class ApiTestcaseBase implements ReferenceData {
 	public String nativesPath;
 	public ApiUtils apiUtil;
 	public static final ObjectMapper MAPPER = new ObjectMapper();
+	public static final ObjectMapper MAPPERIGNOREUNKNOWPROPERTIES = new ObjectMapper();
+
 
 	@BeforeClass(alwaysRun = true)
 	public void intializeSetup(XmlTest config) throws JsonParseException, JsonMappingException, IOException {
@@ -39,6 +42,7 @@ public class ApiTestcaseBase implements ReferenceData {
 		restUtil = new RestHandler(config);
 		apiUtil = new ApiUtils(restUtil, nativesPath);
 		rand = new Random();
+		MAPPERIGNOREUNKNOWPROPERTIES.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	@AfterClass(alwaysRun = true)

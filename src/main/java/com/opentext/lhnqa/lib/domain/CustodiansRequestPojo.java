@@ -38,6 +38,11 @@ public class CustodiansRequestPojo {
 		delegate_email = "DelegatorEmail@otxyz.com";
 	}
 
+	//Just overloaded constructor to create blank object
+	public CustodiansRequestPojo(boolean allNull) {
+
+	}
+
 	public String getFirst_name() {
 		return first_name;
 	}
@@ -294,6 +299,6 @@ public class CustodiansRequestPojo {
 			return false;
 		return true;
 	}
-	
-	
+
+
 }
